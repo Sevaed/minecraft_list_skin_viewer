@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рендер Minecraft скинов</title>
+    <script type="module">
+        import { SkinViewer, WalkingAnimation } from "skinview3d";
+
+        let skinIndex = 1;
+        let maxSkins = 81;
+        let viewer;
+
+        function loadSkin(index) {
+            let skinPath = `/skins/${index}.png`;
+            
+            document.getElementById("skinNumber").textContent = `Скин: ${index}`;
+
+            if (viewer) {
+                viewer.loadSkin(skinPath);
+            } else {
+                viewer = new SkinViewer({
+                    canvas: document.createElement("canvas"),
+                    width: 300,
+                    height: 400,
+                    skin: skinPath
+                });
+
+                document.getElementById("skinContainer").appendChild(viewer.canvas);
+                viewer.controls.enableRotate = true;
+                viewer.animation = null;
+            }
+        }
+
+        function nextSkin() {
+            skinIndex = skinIndex < maxSkins ? skinIndex + 1 : 1;
+            loadSkin(skinIndex);
+        }
+
+        function prevSkin() {
+            skinIndex = skinIndex > 1 ? skinIndex - 1 : maxSkins;
+            loadSkin(skinIndex);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("nextSkinButton").addEventListener("click", nextSkin);
+            document.getElementById("prevSkinButton").addEventListener("click", prevSkin);
+            loadSkin(skinIndex);
+        });
+
+    </script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e1e2e, #27293d);
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        #skinContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 300px;
+            height: 400px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            background: #1b1b2f;
+        }
+        .controls {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .arrow-btn {
+            background: #3a3a5e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 24px;
+            cursor: pointer;
+            margin: 0 10px;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .arrow-btn:hover {
+            background: #5a5a8e;
+        }
+        .skin-number {
+            font-size: 18px;
+            margin: 0 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Рендер Minecraft скинов</h1>
+    <div id="skinContainer"></div>
+
+    <div class="controls">
+        <button id="prevSkinButton" class="arrow-btn">◀</button>
+        <span id="skinNumber" class="skin-number">Скин: 1</span>
+        <button id="nextSkinButton" class="arrow-btn">▶</button>
+    </div>
+
+</body>
+</html>
